@@ -1,16 +1,13 @@
-// 43.6532° N, 79.3832° W
 JSONObject json;
+JSONObject iss_position;
 float angle = 0;
 float r = 200;
+float lat = 0;
+float lon = 0;
 
 
 void setup() {
   size(500,500, P3D);
-  json = loadJSONObject("http://api.open-notify.org/iss-now.json");
-  float lon = json.getFloat("iss_position.longitude");
-  print(lon);
-  // float timestamp = json.getFloat("timestamp");
-  // print(timestamp);
 }
 
 void draw () {
@@ -24,13 +21,23 @@ void draw () {
   noStroke();
   sphere(r);
   angle += 0.05;
- 
-  //float theta = radians(lat) + PI/2;
-  //float phi = radians(lon) + PI;
   
-  //float x = r*sin(theta)*cos(phi);
-  //float y = -r*sin(theta)*sin(phi);
-  //float z = r*cos(theta);
-  //translate(x,y,z);
-  //box(10);
+  query_API();
+  float theta = radians(lat) + PI/2;
+  float phi = radians(lon) + PI;
+  
+  float x = r*sin(theta)*cos(phi);
+  float y = r*sin(theta)*sin(phi);
+  float z = r*cos(theta);
+  translate(x,y,z);
+  box(10);
+}
+
+void query_API () {
+  json = loadJSONObject("http://api.open-notify.org/iss-now.json");
+  iss_position = json.getJSONObject("iss_position");
+  lat = iss_position.getFloat("latitude");
+  lon = iss_position.getFloat("longitude"); 
+  println(lat);
+  println(lon);
 }
