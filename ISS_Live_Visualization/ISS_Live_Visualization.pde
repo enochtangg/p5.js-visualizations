@@ -1,17 +1,22 @@
-// Scale: If 1px = 31.855km
-// 1. Then, the radius of earth is 6371km which is drawn with 200px
-// 2. Then, the altitude of ISS is 408km which is draw with 12.8px from surface of earth
+// Scale: 1px = 31.855km
 JSONObject json;
 JSONObject iss_position;
+String url = "http://api.open-notify.org/iss-now.json";
+PImage earth;
+PShape globe;
 float angle = 0;
 float r = 200;
 float lat = 0;
 float lon = 0;
-float alt = -12.8;
+float alt = 0;
 
 
 void setup() {
   size(800,800, P3D);
+  earth = loadImage("earth_texture.jpg");
+  noStroke();
+  globe = createShape(SPHERE,r);
+  globe.setTexture(earth);
 }
 
 void draw () {
@@ -23,28 +28,34 @@ void draw () {
   
   fill(200);
   noStroke();
-  sphere(r);
+  //sphere(r);
+  shape(globe);
   angle += 0.05;
   
+  // Figure out a way to slow this down to querying API 5-10 times a second
   query_API();
-  float theta = radians(lat) + PI/2;
-  float phi = radians(lon) + PI;
-  
-  float x = r*sin(theta)*cos(phi);
-  float y = r*cos(theta);
-  float z = r*sin(theta)*sin(phi);
-  
-  
-  translate(x+alt,y+alt,z+alt);
-  fill(225,0,0);
-  sphere(10);
+  draw_ISS();
 }
 
 void query_API () {
-  json = loadJSONObject("http://api.open-notify.org/iss-now.json");
+  json = loadJSONObject(url);
   iss_position = json.getJSONObject("iss_position");
   lat = iss_position.getFloat("latitude");
   lon = iss_position.getFloat("longitude"); 
   println(lat);
   println(lon);
+}
+
+void draw_ISS () {
+  float theta = radians(lat) + PI/2;
+  float phi = radians(lon) + PI;
+  float x = r*sin(theta)*cos(phi);
+  float y = r*cos(theta);
+  float z = r*sin(theta)*sin(phi);
+  
+  pushMatrix();
+  translate(x+alt,y+alt,z+alt);
+  fill(225,0,0);
+  sphere(10);
+  popMatrix();
 }
