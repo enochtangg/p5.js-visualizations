@@ -1,12 +1,13 @@
-// Scale: 1px = 31.855km
-// 1. Radius of earth is 6371km which is drawn with 200px
-// 2. Altitude of ISS is 408km which is draw with 12.8px from surface of earth
+// Scale: If 1px = 31.855km
+// 1. Then, the radius of earth is 6371km which is drawn with 200px
+// 2. Then, the altitude of ISS is 408km which is draw with 12.8px from surface of earth
 JSONObject json;
 JSONObject iss_position;
 float angle = 0;
 float r = 200;
 float lat = 0;
 float lon = 0;
+float alt = -12.8;
 
 
 void setup() {
@@ -23,22 +24,20 @@ void draw () {
   fill(200);
   noStroke();
   sphere(r);
-  angle += 0.03;
+  angle += 0.05;
   
   query_API();
-  //float theta = radians(lat) + PI/2;
-  //float phi = radians(lon) + PI;
+  float theta = radians(lat) + PI/2;
+  float phi = radians(lon) + PI;
   
-  //float x = r*sin(theta)*cos(phi);
-  //float y = r*sin(theta)*sin(phi);
-  //float z = r*cos(theta);
-   
-  float x = r*cos(lat)*cos(lon);
-  float y = r*cos(lat)*sin(lon);
-  float z = r*sin(lat);
+  float x = r*sin(theta)*cos(phi);
+  float y = r*cos(theta);
+  float z = r*sin(theta)*sin(phi);
   
-  translate(x,y,z);
-  sphere(30);
+  
+  translate(x+alt,y+alt,z+alt);
+  fill(225,0,0);
+  sphere(10);
 }
 
 void query_API () {
