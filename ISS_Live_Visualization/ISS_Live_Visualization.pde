@@ -8,7 +8,7 @@ float angle = 0;
 float r = 200;
 float lat = 0;
 float lon = 0;
-float alt = 0;
+float alt = 20;
 
 
 void setup() {
@@ -28,11 +28,9 @@ void draw () {
   
   fill(200);
   noStroke();
-  //sphere(r);
   shape(globe);
   angle += 0.05;
   
-  // Figure out a way to slow this down to querying API 5-10 times a second
   query_API();
   draw_ISS();
 }
@@ -53,9 +51,14 @@ void draw_ISS () {
   float y = r*cos(theta);
   float z = r*sin(theta)*sin(phi);
   
-  pushMatrix();
-  translate(x+alt,y+alt,z+alt);
+  pushMatrix();  
+  translate(x-alt,y-alt,z-alt);
   fill(225,0,0);
   sphere(10);
   popMatrix();
 }
+
+// Things to do:
+// Align earth texture to actual location of ISS
+// Draw lineetween surface and ISS
+// Slow down API query 
