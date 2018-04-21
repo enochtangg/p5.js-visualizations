@@ -8,7 +8,7 @@ float angle = 0;
 float r = 200;
 float lat = 0;
 float lon = 0;
-float alt = 20;
+float alt = 50;
 
 
 void setup() {
@@ -20,16 +20,14 @@ void setup() {
 }
 
 void draw () {
-  background(51);
-  lights();
-
+  background(40);
+  
   translate(width*0.5, height*0.5);
   rotateY(angle);
+  angle += 0.05;
   
-  fill(200);
   noStroke();
   shape(globe);
-  angle += 0.05;
   
   query_API();
   draw_ISS();
